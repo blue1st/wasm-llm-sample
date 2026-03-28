@@ -3,14 +3,10 @@ import type { InitProgressReport, MLCEngine } from '@mlc-ai/web-llm';
 import { CreateMLCEngine } from '@mlc-ai/web-llm';
 
 export const AVAILABLE_MODELS = [
-  { id: 'Llama-3.2-1B-Instruct-q4f32_1-MLC', name: 'Llama 3.2 (1B)', description: 'Fastest, very lightweight' },
-  { id: 'Qwen2.5-1.5B-Instruct-q4f16_1-MLC', name: 'Qwen 2.5 (1.5B)', description: 'Fast, good Japanese support' },
-  { id: 'gemma-2-2b-jpn-it-q4f16_1-MLC', name: 'Gemma 2 JPN (2B)', description: 'Excellent Japanese support' },
-  { id: 'Llama-3.2-3B-Instruct-q4f32_1-MLC', name: 'Llama 3.2 (3B)', description: 'Balanced performance' },
-  { id: 'Phi-3.5-mini-instruct-q4f16_1-MLC', name: 'Phi-3.5 Mini (3.8B)', description: 'Strong reasoning capability' },
-  { id: 'Qwen2.5-7B-Instruct-q4f16_1-MLC', name: 'Qwen 2.5 (7B)', description: 'High quality, great Japanese' },
-  { id: 'Llama-3.1-8B-Instruct-q4f16_1-MLC', name: 'Llama 3.1 (8B)', description: 'General purpose high quality' },
-  { id: 'DeepSeek-R1-Distill-Qwen-7B-q4f16_1-MLC', name: 'DeepSeek R1 Distill (7B)', description: 'Advanced reasoning/Math' }
+  { id: 'gemma-3-1b-it-q4f16_1-MLC', name: 'Gemma 3 (1B)', description: '最小で超高速' },
+  { id: 'gemma-3-4b-it-q4f16_1-MLC', name: 'Gemma 3 (4B)', description: 'バランスの良いモデル' },
+  { id: 'gemma-3-12b-it-q4f16_1-MLC', name: 'Gemma 3 (12B)', description: '高品質で高負荷' },
+  { id: 'gemma-3-27b-it-q4f16_1-MLC', name: 'Gemma 3 (27B)', description: '最高品質で超高負荷' }
 ];
 
 export const DEFAULT_MODEL = AVAILABLE_MODELS[0].id;
