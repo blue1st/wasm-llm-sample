@@ -228,27 +228,29 @@ function App() {
         )}
       </main>
 
-      <footer className="input-container">
-        <div className="input-wrapper">
-          <textarea
-            ref={textareaRef}
-            rows={1}
-            placeholder={isReady ? "Ask me anything..." : "Initialize the engine first..."}
-            value={input}
-            onChange={handleInput}
-            onKeyDown={handleKeyDown}
-            disabled={!isReady || isGenerating}
-          />
-          <button 
-            className="send-button"
-            onClick={handleSend}
-            disabled={!input.trim() || !isReady || isGenerating}
-            aria-label="Send message"
-          >
-            <Send size={18} />
-          </button>
-        </div>
-      </footer>
+      {(isReady || isInitializing) && (
+        <footer className="input-container">
+          <div className="input-wrapper">
+            <textarea
+              ref={textareaRef}
+              rows={1}
+              placeholder={isReady ? "Ask me anything..." : "Initializing model..."}
+              value={input}
+              onChange={handleInput}
+              onKeyDown={handleKeyDown}
+              disabled={!isReady || isGenerating}
+            />
+            <button 
+              className="send-button"
+              onClick={handleSend}
+              disabled={!input.trim() || !isReady || isGenerating}
+              aria-label="Send message"
+            >
+              <Send size={18} />
+            </button>
+          </div>
+        </footer>
+      )}
     </div>
   );
 }
