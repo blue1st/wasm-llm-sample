@@ -16,6 +16,11 @@ function App() {
   
   const [selectedModel, setSelectedModel] = useState(DEFAULT_MODEL);
   const [input, setInput] = useState('');
+  const [modelSearch, setModelSearch] = useState('');
+
+  const filteredModels = AVAILABLE_MODELS.filter(model => 
+    model.name.toLowerCase().includes(modelSearch.toLowerCase())
+  );
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -107,6 +112,23 @@ function App() {
               <label htmlFor="model-select" style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', color: '#94a3b8' }}>
                 Select WebLLM Model:
               </label>
+              <input
+                type="text"
+                placeholder="Search models... (e.g. gemma, llama)"
+                value={modelSearch}
+                onChange={(e) => setModelSearch(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '0.75rem',
+                  borderRadius: '0.5rem',
+                  background: '#1e293b',
+                  color: '#f8fafc',
+                  border: '1px solid #334155',
+                  outline: 'none',
+                  fontSize: '0.9rem',
+                  marginBottom: '0.5rem'
+                }}
+              />
               <select
                 id="model-select"
                 value={selectedModel}
@@ -122,11 +144,15 @@ function App() {
                   fontSize: '0.9rem',
                 }}
               >
-                {AVAILABLE_MODELS.map(model => (
-                  <option key={model.id} value={model.id}>
-                    {model.name} ({model.description})
-                  </option>
-                ))}
+                {filteredModels.length > 0 ? (
+                  filteredModels.map(model => (
+                    <option key={model.id} value={model.id}>
+                      {model.name}
+                    </option>
+                  ))
+                ) : (
+                  <option disabled value="">No models found.</option>
+                )}
               </select>
             </div>
 

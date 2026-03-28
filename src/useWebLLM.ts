@@ -1,15 +1,15 @@
 import { useState, useRef, useCallback } from 'react';
 import type { InitProgressReport, MLCEngine } from '@mlc-ai/web-llm';
-import { CreateMLCEngine } from '@mlc-ai/web-llm';
+import { CreateMLCEngine, prebuiltAppConfig } from '@mlc-ai/web-llm';
 
-export const AVAILABLE_MODELS = [
-  { id: 'gemma-3-1b-it-q4f16_1-MLC', name: 'Gemma 3 (1B)', description: '最小で超高速' },
-  { id: 'gemma-3-4b-it-q4f16_1-MLC', name: 'Gemma 3 (4B)', description: 'バランスの良いモデル' },
-  { id: 'gemma-3-12b-it-q4f16_1-MLC', name: 'Gemma 3 (12B)', description: '高品質で高負荷' },
-  { id: 'gemma-3-27b-it-q4f16_1-MLC', name: 'Gemma 3 (27B)', description: '最高品質で超高負荷' }
-];
+// WebLLM公式で現在サポート・コンパイル済みの全モデルを動的に取得
+export const AVAILABLE_MODELS = prebuiltAppConfig.model_list.map(model => ({
+  id: model.model_id,
+  name: model.model_id,
+  description: '公式サポートモデル'
+}));
 
-export const DEFAULT_MODEL = AVAILABLE_MODELS[0].id;
+export const DEFAULT_MODEL = AVAILABLE_MODELS.length > 0 ? AVAILABLE_MODELS[0].id : '';
 export interface ChatMessage {
   role: 'user' | 'assistant' | 'system';
   content: string;
@@ -32,7 +32,11 @@ export function useWebLLM() {
         setInitProgress(report);
       };
 
-      const newEngine = await CreateMLCEngine(selectedModelId, { initProgressCallback });
+      // デフォルトのモデルリストから選択されるため、カスタム appConfig は不要
+      const newEngine = await CreateMLCEngine(selectedModelId, { 
+        initProgressCallback,
+      });
+      
       engineRef.current = newEngine;
       setIsReady(true);
     } catch (error) {
