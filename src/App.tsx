@@ -11,6 +11,7 @@ function App() {
     isGenerating,
     messages,
     initializeEngine,
+    resetEngine,
     sendMessage,
   } = useWebLLM();
   
@@ -70,7 +71,31 @@ function App() {
         <h1><Sparkles size={20} className="text-indigo-400" /> WebAssembly LLM</h1>
         <div className={`status-badge ${isReady ? 'ready' : isInitializing ? 'loading' : 'offline'}`}>
           {isReady ? (
-            <>Ready</>
+            <>
+              <span style={{ fontWeight: 'normal', opacity: 0.9 }}>
+                {AVAILABLE_MODELS.find(m => m.id === selectedModel)?.name || selectedModel}
+              </span> 
+              <button
+                onClick={resetEngine}
+                style={{
+                  background: 'rgba(255,255,255,0.15)',
+                  border: '1px solid rgba(255,255,255,0.3)',
+                  color: 'white',
+                  borderRadius: '4px',
+                  padding: '2px 8px',
+                  margin: '0 0.5rem',
+                  fontSize: '0.75rem',
+                  cursor: 'pointer',
+                  transition: 'background 0.2s'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.25)'}
+                onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.15)'}
+                title="Change Model"
+              >
+                Change
+              </button>
+              Ready
+            </>
           ) : isInitializing ? (
             <><Loader2 size={12} className="loader-spinner" style={{width: 12, height: 12, borderWidth: 2}}/> Loading</>
           ) : (

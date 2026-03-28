@@ -46,6 +46,20 @@ export function useWebLLM() {
     }
   }, [isInitializing, isReady]);
 
+  const resetEngine = useCallback(async () => {
+    if (engineRef.current) {
+      try {
+        await engineRef.current.unload(); // Free WebGPU memory
+      } catch (e) {
+        console.error('Failed to unload engine:', e);
+      }
+      engineRef.current = null;
+    }
+    setIsReady(false);
+    setMessages([]);
+    setInitProgress(null);
+  }, []);
+
   const sendMessage = useCallback(async (content: string) => {
     if (!engineRef.current || isGenerating) return;
 
@@ -91,6 +105,7 @@ export function useWebLLM() {
     isGenerating,
     messages,
     initializeEngine,
+    resetEngine,
     sendMessage,
   };
 }
