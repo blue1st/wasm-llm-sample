@@ -26,6 +26,7 @@ body {
   color: var(--text-primary);
   line-height: 1.5;
   height: 100vh;
+  height: 100dvh;
   margin: 0;
   overflow: hidden;
 }
@@ -34,6 +35,7 @@ body {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  height: 100dvh;
   max-width: 900px;
   margin: 0 auto;
   position: relative;
@@ -208,6 +210,7 @@ body {
 
 .input-container {
   padding: 1.5rem 2rem;
+  padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
   background: linear-gradient(to top, var(--bg-color) 60%, transparent);
   z-index: 10;
 }
