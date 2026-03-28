@@ -2,11 +2,29 @@ import { useState, useRef, useCallback } from 'react';
 import type { InitProgressReport, MLCEngine } from '@mlc-ai/web-llm';
 import { CreateMLCEngine, prebuiltAppConfig } from '@mlc-ai/web-llm';
 
-// WebLLM公式で現在サポート・コンパイル済みの全モデルを動的に取得
-export const AVAILABLE_MODELS = prebuiltAppConfig.model_list.map(model => ({
+// カスタムでGemma-3-1Bを追加
+const CUSTOM_MODELS = [
+  {
+    model: 'https://huggingface.co/mlc-ai/gemma-3-1b-it-q4f16_1-MLC/resolve/main/',
+    model_id: 'gemma-3-1b-it-q4f16_1-MLC',
+    model_lib: 'https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/web-llm-models/v0_2_80/gemma-3-1b-it-q4f16_1-ctx4k_cs1k-webgpu.wasm',
+  }
+];
+
+// 公式カタログとカスタム追加分を結合
+const appConfig = {
+  ...prebuiltAppConfig,
+  model_list: [
+    ...CUSTOM_MODELS,
+    ...prebuiltAppConfig.model_list
+  ]
+};
+
+// ドロップダウン用の表示リストを生成
+export const AVAILABLE_MODELS = appConfig.model_list.map(model => ({
   id: model.model_id,
-  name: model.model_id,
-  description: '公式サポートモデル'
+  name: model.model_id === 'gemma-3-1b-it-q4f16_1-MLC' ? 'Gemma 3 (1B)' : model.model_id,
+  description: model.model_id === 'gemma-3-1b-it-q4f16_1-MLC' ? 'カスタム追加 (最新)' : '公式サポートモデル'
 }));
 
 export const DEFAULT_MODEL = AVAILABLE_MODELS.length > 0 ? AVAILABLE_MODELS[0].id : '';
@@ -32,9 +50,10 @@ export function useWebLLM() {
         setInitProgress(report);
       };
 
-      // デフォルトのモデルリストから選択されるため、カスタム appConfig は不要
+      // カスタムリストを含めた appConfig を渡すことで、公式＋Gemma-3 の両方を認識させる
       const newEngine = await CreateMLCEngine(selectedModelId, { 
         initProgressCallback,
+        appConfig
       });
       
       engineRef.current = newEngine;
