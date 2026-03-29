@@ -1,6 +1,6 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import type { InitProgressReport, MLCEngine } from '@mlc-ai/web-llm';
-import { CreateMLCEngine, prebuiltAppConfig } from '@mlc-ai/web-llm';
+import { CreateMLCEngine, prebuiltAppConfig, hasModelInCache } from '@mlc-ai/web-llm';
 
 // カスタムでGemma-3-1Bを追加
 const CUSTOM_MODELS = [
@@ -39,7 +39,31 @@ export function useWebLLM() {
   const [isReady, setIsReady] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [cachedModels, setCachedModels] = useState<Record<string, boolean>>({});
   const engineRef = useRef<MLCEngine | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    const checkCache = async () => {
+      const results: Record<string, boolean> = {};
+      await Promise.all(
+        AVAILABLE_MODELS.map(async (m) => {
+          try {
+            results[m.id] = await hasModelInCache(m.id, appConfig);
+          } catch (error) {
+            results[m.id] = false;
+          }
+        })
+      );
+      if (mounted) {
+        setCachedModels(results);
+      }
+    };
+    checkCache();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const initializeEngine = useCallback(async (selectedModelId: string = DEFAULT_MODEL) => {
     if (isInitializing || isReady) return;
@@ -126,5 +150,6 @@ export function useWebLLM() {
     initializeEngine,
     resetEngine,
     sendMessage,
+    cachedModels,
   };
 }

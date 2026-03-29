@@ -13,6 +13,7 @@ function App() {
     initializeEngine,
     resetEngine,
     sendMessage,
+    cachedModels,
   } = useWebLLM();
   
   const [selectedModel, setSelectedModel] = useState(DEFAULT_MODEL);
@@ -172,7 +173,7 @@ function App() {
                 {filteredModels.length > 0 ? (
                   filteredModels.map(model => (
                     <option key={model.id} value={model.id}>
-                      {model.name}
+                      {cachedModels[model.id] ? '💾 ' : ''}{model.name}
                     </option>
                   ))
                 ) : (
