@@ -1,9 +1,9 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import type { InitProgressReport, MLCEngine } from '@mlc-ai/web-llm';
+import type { InitProgressReport, MLCEngine, ModelRecord, AppConfig } from '@mlc-ai/web-llm';
 import { CreateMLCEngine, prebuiltAppConfig, hasModelInCache } from '@mlc-ai/web-llm';
 
 // カスタムでGemma-3-1Bを追加
-const CUSTOM_MODELS = [
+const CUSTOM_MODELS: ModelRecord[] = [
   /*{
     model: 'https://huggingface.co/mlc-ai/gemma-3-1b-it-q4f16_1-MLC/resolve/main/',
     model_id: 'gemma-3-1b-it-q4f16_1-MLC',
@@ -12,7 +12,7 @@ const CUSTOM_MODELS = [
 ];
 
 // 公式カタログとカスタム追加分を結合
-const appConfig = {
+const appConfig: AppConfig = {
   ...prebuiltAppConfig,
   model_list: [
     ...CUSTOM_MODELS,
