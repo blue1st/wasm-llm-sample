@@ -4,11 +4,11 @@ import { CreateMLCEngine, prebuiltAppConfig, hasModelInCache } from '@mlc-ai/web
 
 // カスタムでGemma-3-1Bを追加
 const CUSTOM_MODELS = [
-  {
+  /*{
     model: 'https://huggingface.co/mlc-ai/gemma-3-1b-it-q4f16_1-MLC/resolve/main/',
     model_id: 'gemma-3-1b-it-q4f16_1-MLC',
     model_lib: 'https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/web-llm-models/v0_2_80/gemma-3-1b-it-q4f16_1-ctx4k_cs1k-webgpu.wasm',
-  }
+  }*/
 ];
 
 // 公式カタログとカスタム追加分を結合
@@ -75,11 +75,11 @@ export function useWebLLM() {
       };
 
       // カスタムリストを含めた appConfig を渡すことで、公式＋Gemma-3 の両方を認識させる
-      const newEngine = await CreateMLCEngine(selectedModelId, { 
+      const newEngine = await CreateMLCEngine(selectedModelId, {
         initProgressCallback,
         appConfig
       });
-      
+
       engineRef.current = newEngine;
       setIsReady(true);
     } catch (error) {
